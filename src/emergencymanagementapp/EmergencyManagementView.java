@@ -257,7 +257,7 @@ public class EmergencyManagementView extends FrameView {
         System.out.println(jTextPane1.getText());
         
         //setVisible(false); //<--Doesn't work
-        mainPage.mainScreen ms = new mainPage.mainScreen();
+        mainPage.mainScreen ms = new mainPage.mainScreen(jTextPane1.getText());
         ms.setVisible(true);
         
     }

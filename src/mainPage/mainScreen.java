@@ -18,9 +18,17 @@ import org.jdesktop.application.Action;
  */
 public class mainScreen extends javax.swing.JFrame {
 
+    String username;
     /** Creates new form mainScreen */
     public mainScreen() {
         initComponents();
+    }
+    
+    public mainScreen(String uname) {
+        initComponents();
+        username = uname;
+        jLabel2.setText(username);
+        jLabel3.setText("So-and-so");
     }
 
     /** This method is called from within the constructor to
@@ -185,6 +193,7 @@ public class mainScreen extends javax.swing.JFrame {
 
     @Action
     public void resourceSearch() {
+
     }
 
     @Action
@@ -193,6 +202,8 @@ public class mainScreen extends javax.swing.JFrame {
 
     @Action
     public void addResource() {
+        SubPages.AddResource rs = new SubPages.AddResource();
+        rs.setVisible(true);
     }
 
     @Action
