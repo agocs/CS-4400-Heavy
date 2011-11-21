@@ -256,6 +256,10 @@ public class EmergencyManagementView extends FrameView {
         //#TODO Log in code
         System.out.println(jTextPane1.getText());
         
+        //setVisible(false); //<--Doesn't work
+        mainPage.mainScreen ms = new mainPage.mainScreen();
+        ms.setVisible(true);
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
