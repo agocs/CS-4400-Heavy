@@ -11,6 +11,7 @@
 package mainPage;
 
 import org.jdesktop.application.Action;
+import java.sql.*;
 
 /**
  *
@@ -19,13 +20,15 @@ import org.jdesktop.application.Action;
 public class mainScreen extends javax.swing.JFrame {
 
     String username;
+    Connection conn = null;
     /** Creates new form mainScreen */
     public mainScreen() {
         initComponents();
     }
     
-    public mainScreen(String uname) {
+    public mainScreen(String uname, Connection conn) {
         initComponents();
+        this.conn = conn;
         username = uname;
         jLabel2.setText(username);
         jLabel3.setText("So-and-so");
