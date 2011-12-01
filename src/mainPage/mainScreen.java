@@ -198,7 +198,7 @@ public class mainScreen extends javax.swing.JFrame {
 
     @Action
     public void resourceSearch() {
-
+        
     }
 
     @Action
@@ -216,11 +216,14 @@ public class mainScreen extends javax.swing.JFrame {
 
     @Action
     public void resourceStatus() {
+        SubPages.SearchForResource searchFor = new Subpages.SearchForResource();
+        searchFor.setVisible(true);
     }
 
     @Action
     public void resourceReport() {
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
