@@ -22,28 +22,11 @@ import java.sql.*;
  */
 public class EmergencyManagementView extends FrameView {
 
-    Connection conn = null; // JDBC Connection -- Chris
     
     public EmergencyManagementView(SingleFrameApplication app) {
         super(app);
 
         initComponents();
-        
-          String url = "jdbc:mysql://academic-mysql.cc.gatech.edu/";
-          String dbName = "cs4400_Group33";
-          String driver = "com.mysql.jdbc.Driver";
-          String userName = "cs4400_Group33"; 
-          String password = "7mJVoCfJ";
-          
-          try {
-              //System.out.println("Attempting to connect 1");
-  Class.forName(driver).newInstance ();
-  //System.out.println("Attempting to connect 2");
-  Connection conn = DriverManager.getConnection(url+dbName,userName,password);
-  //System.out.println("Connected to the database");
-  } catch (Exception e) {
-  e.printStackTrace();
-  }
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
@@ -276,23 +259,53 @@ public class EmergencyManagementView extends FrameView {
         System.out.println(jTextPane1.getText());
         int login = 0;
         ResultSet rs = null;
+        
+                
+          String url = "jdbc:mysql://academic-mysql.cc.gatech.edu/";
+          String dbName = "cs4400_Group33";
+          String driver = "com.mysql.jdbc.Driver";
+          String userName = "cs4400_Group33"; 
+          String password = "7mJVoCfJ";
+          
+    Connection conn = null; // JDBC Connection -- Chris
+          try {
+              //System.out.println("Attempting to connect 1");
+  Class.forName(driver).newInstance ();
+  //System.out.println("Attempting to connect 2");
+  conn = DriverManager.getConnection(url+dbName,userName,password);
+  System.out.println("Connected to the database");
+  } catch (Exception e) {
+  e.printStackTrace();
+  }
+
+        
+        
         try{
             Statement st = conn.createStatement();
-            String query = "SELECT COUNT (*) FROM USER where USER.USERNAME = '";
+            System.out.println("Statement created");
+            String query = "SELECT COUNT(*) FROM USER where USER.USERNAME = '";
             query += jTextPane1.getText();
             query += "' AND PASSWORD = '";
             query += jTextPane2.getText();
             query += "';";
+            System.out.println(query);
             rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
+            System.out.println("Sent to DB");
+            rs.first();
             login = rs.getInt(1);
+            System.out.println("Results parsed");
         }
         catch(SQLException s){
+            System.out.println("Failed to create a connection");
             s.printStackTrace(); // this is lazy. --chris
         }
         
         if(login > 0){ //if login is valid, go 'head and open up the rest of the thing
             mainPage.mainScreen ms = new mainPage.mainScreen(jTextPane1.getText(), conn);
             ms.setVisible(true);
+        }
+        else{
+            System.out.println("invalid login");
         }
         
 
