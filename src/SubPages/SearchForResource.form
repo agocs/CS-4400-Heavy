@@ -50,7 +50,7 @@
                       <Component id="jLabel6" min="-2" pref="147" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="54" max="32767" attributes="0"/>
+              <EmptySpace pref="61" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace pref="219" max="32767" attributes="0"/>
@@ -62,7 +62,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" pref="303" max="-2" attributes="0"/>
-              <EmptySpace pref="61" max="32767" attributes="0"/>
+              <EmptySpace pref="102" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -141,6 +141,9 @@
             <StringItem index="3" value="Item 4"/>
           </StringArray>
         </Property>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="SubPages.SearchForResource" id="populateComboBox" methodName="populateComboBox"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="jComboBox1" noResource="true"/>
       </Properties>
     </Component>
@@ -153,6 +156,9 @@
             <StringItem index="2" value="Item 3"/>
             <StringItem index="3" value="Item 4"/>
           </StringArray>
+        </Property>
+        <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+          <action class="SubPages.SearchForResource" id="populateComboBox2" methodName="populateComboBox2"/>
         </Property>
         <Property name="name" type="java.lang.String" value="jComboBox2" noResource="true"/>
       </Properties>

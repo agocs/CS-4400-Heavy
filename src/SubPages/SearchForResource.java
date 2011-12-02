@@ -12,6 +12,7 @@ package SubPages;
 
 import org.jdesktop.application.Action;
 import java.sql.*;
+import java.util.*;
 
 /**
  *
@@ -20,12 +21,20 @@ import java.sql.*;
 public class SearchForResource extends javax.swing.JFrame {
     Connection conn = null;
     String username = null;
+    ArrayList MyEsfList = new ArrayList();
+    ArrayList MyIncidentList = new ArrayList();
 
     /** Creates new form SearchForResource */
     public SearchForResource(String username, Connection conn) {
         this.conn = conn;
         this.username = username;
         
+        
+        // We need to Run this query properly to populate the list for combobox
+        //MyEsfList = runQuery("Select Name, Description From ESF");
+        //MyIncidentList = runQuery("SELECT Incident_id, description" From incident)
+        populateComboBox();
+        populateComboBox2();
         initComponents();
      
     }
@@ -77,9 +86,12 @@ public class SearchForResource extends javax.swing.JFrame {
         jTextField1.setName("jTextField1"); // NOI18N
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(emergencymanagementapp.EmergencyManagementApp.class).getContext().getActionMap(SearchForResource.class, this);
+        jComboBox1.setAction(actionMap.get("populateComboBox")); // NOI18N
         jComboBox1.setName("jComboBox1"); // NOI18N
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.setAction(actionMap.get("populateComboBox2")); // NOI18N
         jComboBox2.setName("jComboBox2"); // NOI18N
 
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
@@ -91,7 +103,6 @@ public class SearchForResource extends javax.swing.JFrame {
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(emergencymanagementapp.EmergencyManagementApp.class).getContext().getActionMap(SearchForResource.class, this);
         jButton1.setAction(actionMap.get("cancel")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
 
@@ -123,9 +134,9 @@ public class SearchForResource extends javax.swing.JFrame {
                         .add(jTextField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 35, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jLabel6, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 147, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(178, Short.MAX_VALUE)
+                .addContainerGap(219, Short.MAX_VALUE)
                 .add(jButton1)
                 .add(18, 18, 18)
                 .add(jButton2)
@@ -133,7 +144,7 @@ public class SearchForResource extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .add(55, 55, 55)
                 .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 303, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap(102, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -211,6 +222,24 @@ public class SearchForResource extends javax.swing.JFrame {
         
         String keyWordField = jTextField1.getText();
         int distanceVar = Integer.parseInt(jTextField2.getText());
+        
+    }
+
+    @Action
+    public void populateComboBox() {
+        for (int i =0; i< MyEsfList.size(); i++){
+           jComboBox1.addItem(i);// Dont know why doesnt work
+        }
+        jComboBox1.getSelectedItem();
+    }
+
+    @Action
+    public void populateComboBox2() {
+        for (int i =0; i < MyIncidentList.size(); i++){
+            jComboBox2.addItem(i);
+        }
+        jComboBox2.getSelectedItem();
+    } 
         
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
