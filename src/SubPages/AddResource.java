@@ -11,6 +11,7 @@
 package SubPages;
 
 import org.jdesktop.application.Action;
+import java.sql.*;
 
 /**
  *
@@ -18,8 +19,17 @@ import org.jdesktop.application.Action;
  */
 public class AddResource extends javax.swing.JFrame {
 
+    String username = null;
+    Connection conn = null;
+    
     /** Creates new form AddResource */
     public AddResource() {
+        initComponents();
+    }
+    
+    public AddResource(String username, Connection conn) {
+        this.conn = conn;
+        this.username = username;
         initComponents();
     }
 

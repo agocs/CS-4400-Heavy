@@ -29,14 +29,16 @@ public class EmergencyManagementView extends FrameView {
 
         initComponents();
         
-          String url = "jdbc:mysql://localhost:3306/";
-          String dbName = "jdbctutorial";
+          String url = "jdbc:mysql://academic-mysql.cc.gatech.edu:3306/";
+          String dbName = "cs4400_Group33";
           String driver = "com.mysql.jdbc.Driver";
-          String userName = "root"; 
-          String password = "root";
+          String userName = "cs4400_Group33"; 
+          String password = "7mJVoCfJ";
           
           try {
+              System.out.println("Attempting to connect 1");
   Class.forName(driver).newInstance();
+  System.out.println("Attempting to connect 2");
   Connection conn = DriverManager.getConnection(url+dbName,userName,password);
   System.out.println("Connected to the database");
   } catch (Exception e) {

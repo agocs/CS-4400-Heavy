@@ -210,13 +210,13 @@ public class mainScreen extends javax.swing.JFrame {
 
     @Action
     public void addResource() {
-        SubPages.AddResource rs = new SubPages.AddResource();
+        SubPages.AddResource rs = new SubPages.AddResource(username, conn);
         rs.setVisible(true);
     }
 
     @Action
     public void resourceStatus() {
-        SubPages.SearchForResource searchFor = new Subpages.SearchForResource();
+        SubPages.SearchForResource searchFor = new SubPages.SearchForResource(username, conn);
         searchFor.setVisible(true);
     }
 

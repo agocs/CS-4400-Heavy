@@ -19,10 +19,18 @@ import java.sql.*;
  */
 public class SearchForResource extends javax.swing.JFrame {
     Connection conn = null;
+    String username = null;
 
     /** Creates new form SearchForResource */
-    public SearchForResource(Connection conn) {
+    public SearchForResource(String username, Connection conn) {
         this.conn = conn;
+        this.username = username;
+        
+        initComponents();
+     
+    }
+    
+        public SearchForResource() {
         
         initComponents();
      
