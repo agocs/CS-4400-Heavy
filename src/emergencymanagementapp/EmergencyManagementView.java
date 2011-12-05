@@ -4,6 +4,7 @@
 
 package emergencymanagementapp;
 
+import DB.DBConnector;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -15,7 +16,6 @@ import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import java.sql.*;
 
 /**
  * The application's main frame.
@@ -257,51 +257,11 @@ public class EmergencyManagementView extends FrameView {
     public void Login() {
         //#TODO Log in code
         System.out.println(jTextPane1.getText());
-        int login = 0;
-        ResultSet rs = null;
         
-                
-          String url = "jdbc:mysql://academic-mysql.cc.gatech.edu/";
-          String dbName = "cs4400_Group33";
-          String driver = "com.mysql.jdbc.Driver";
-          String userName = "cs4400_Group33"; 
-          String password = "7mJVoCfJ";
-          
-    Connection conn = null; // JDBC Connection -- Chris
-          try {
-              //System.out.println("Attempting to connect 1");
-  Class.forName(driver).newInstance ();
-  //System.out.println("Attempting to connect 2");
-  conn = DriverManager.getConnection(url+dbName,userName,password);
-  System.out.println("Connected to the database");
-  } catch (Exception e) {
-  e.printStackTrace();
-  }
-
+        String username = DBConnector.getInstance().login(jTextPane1.getText(), jTextPane2.getText());
         
-        
-        try{
-            Statement st = conn.createStatement();
-            System.out.println("Statement created");
-            String query = "SELECT COUNT(*) FROM USER where USER.USERNAME = '";
-            query += jTextPane1.getText();
-            query += "' AND PASSWORD = '";
-            query += jTextPane2.getText();
-            query += "';";
-            System.out.println(query);
-            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
-            System.out.println("Sent to DB");
-            rs.first();
-            login = rs.getInt(1);
-            System.out.println("Results parsed");
-        }
-        catch(SQLException s){
-            System.out.println("Failed to create a connection");
-            s.printStackTrace(); // this is lazy. --chris
-        }
-        
-        if(login > 0){ //if login is valid, go 'head and open up the rest of the thing
-            mainPage.mainScreen ms = new mainPage.mainScreen(jTextPane1.getText(), conn);
+        if(!username.equals("")){ //if login is valid it should not be empty, go 'head and open up the rest of the thing
+            mainPage.mainScreen ms = new mainPage.mainScreen();
             ms.setVisible(true);
         }
         else{

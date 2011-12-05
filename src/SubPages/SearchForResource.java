@@ -13,37 +13,26 @@ package SubPages;
 import org.jdesktop.application.Action;
 import java.sql.*;
 import java.util.*;
+import DB.*;
 
 /**
  *
  * @author roly_rf
  */
 public class SearchForResource extends javax.swing.JFrame {
-    Connection conn = null;
-    String username = null;
+    
 //    ArrayList MyEsfList = new ArrayList();
 //    ArrayList MyIncidentList = new ArrayList();
 
     /** Creates new form SearchForResource */
-    public SearchForResource(String username, Connection conn) {
+        public SearchForResource() {
         initComponents();
-        this.conn = conn;
-        this.username = username;
-        
+        populateComboBox();
+        populateComboBox2();
         
         // We need to Run this query properly to populate the list for combobox
         //MyEsfList = runQuery("Select Name, Description From ESF");
-        //MyIncidentList = runQuery("SELECT Incident_id, description" From incident)
-        populateComboBox();
-        populateComboBox2();
-        initComponents();
-     
-    }
-    
-        public SearchForResource() {
-        
-        initComponents();
-     
+        //MyIncidentList = runQuery("SELECT Incident_id, description" From incident) 
     }
     /** This method is called from within the constructor to
      * initialize the form.
@@ -232,125 +221,44 @@ public class SearchForResource extends javax.swing.JFrame {
         String keyWordField = jTextField1.getText();
         int distanceVar = Integer.parseInt(jTextField2.getText());
         
-        
-        String query = "SELECT res.RESOURCEID FROM ";
-        query += "(RESOURCE as res ";
-        query += "JOIN SECONDARY_ESF as esf ON res.RESOURCE_ID = esf.RESOURCE_ID) ";
-        query += "JOIN RESOURCE_CAPABILITIES as cap ON res.RESOURCE_ID = cap.RESOURCE_ID ";
-        query += "WHERE ";
+        DBConnector.getInstance().findResources(keyWordField, selectedEsfNum);
         
         
-        //assembling WHERE clause below
-        
-        if (!keyWordField.equals("")){
-            //Add the keyword to the WHERE clause
-            query += "res.NAME LIKE '%" + keyWordField + "%' OR ";
-            query += "res.model LIKE '%" + keyWordField + "%' OR ";
-            query += "cap.CAPABILITY LIKE '%" + keyWordField + "%' AND";
-        }
-        
-        if (selectedEsfNum != 0){
-            query += "res.PRIMARY_ESF = " + selectedEsfNum + " OR ";
-            query += "esf.NUMBER = " + selectedEsfNum + " AND ";
-        }
-        
-        query += "TRUE;";
-        
-        
-    
-        
-        
-        
-        ResultSet rs = null;
-                
-        SearchResultsFrame sf = new SearchResultsFrame(username, conn, rs);
+        //TOD: Fix this
+        SearchResultsFrame sf = new SearchResultsFrame(null, rs);
         sf.setVisible(true);
-
-        
-        try{
-            Statement st = conn.createStatement();
-            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
-
-            
-            if(true) // IF the distance entered is "", don't do this. Writeme
-            {
-            rs.beforeFirst();
-            while (rs.next()){
-                int thisresourcenumber = rs.getInt(1);
-                
-                String askForResourceLoc = "SELECT LATITUDE, LONGITUDE from RESOURCE where RESOURCE_ID = " + thisresourcenumber;
-                ResultSet distance = st.executeQuery(askForResourceLoc);
-                
-
-            }
-            }
-            
-        }
-        catch(SQLException s){
-            s.printStackTrace(); // this is lazy. --chris
-        }
-        
         
     }
 
     @Action
-    public void populateComboBox() {
-        
-        
-        String query = "SELECT DISTINCT NAME, DESCRIPTION FROM ESF";
-        ResultSet rs = null;
-        
+    public void populateComboBox()
+    {
         jComboBox1.addItem(new comboitem(0,"No selection"));
         
-        try{
-            Statement st = conn.createStatement();
-            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
+        ArrayList<ESF> results = DBConnector.getInstance().getAllESF();
+        
+        for(ESF esf : results)
+        {
             
-            
-            rs.beforeFirst();
-            
-            while(rs.next()){
+            jComboBox1.addItem(new comboitem (esf.getName() , esf.getDescription()));
+        }       
              
-                jComboBox1.addItem(new comboitem (rs.getInt(1) , rs.getString(2)));
-            }
-
-        }
-        catch(SQLException s){
-            s.printStackTrace(); // this is lazy. --chris
-        }
-        
-
-        
         //jComboBox1.getSelectedItem();
     }
 
     @Action
-    public void populateComboBox2() {
+    public void populateComboBox2()
+    {
         
         
-        String query = "SELECT DISTINCT INCIDENT_ID, DESCRIPTION FROM INCIDENT;";
-        ResultSet rs = null;
+        jComboBox2.addItem(new comboitem(0,"No selection"));
         
-        jComboBox1.addItem(new comboitem(0,"No selection"));
+        ArrayList<Incident> results = DBConnector.getInstance().incidentsDescAndId();
         
-        try{
-            Statement st = conn.createStatement();
-            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
-            
-            
-            rs.beforeFirst();
-            
-            while(rs.next()){
-             
-                jComboBox2.addItem(new comboitem (rs.getInt(1) , rs.getString(2)));
-            }
-
+        for(Incident inc : results)
+        {
+            jComboBox2.addItem(new comboitem (inc.getIncidentId(), inc.getDescription()));
         }
-        catch(SQLException s){
-            s.printStackTrace(); // this is lazy. --chris
-        }
-        
-        
     } 
         
     

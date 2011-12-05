@@ -10,6 +10,7 @@
  */
 package mainPage;
 
+import DB.DBConnector;
 import org.jdesktop.application.Action;
 import java.sql.*;
 
@@ -19,20 +20,13 @@ import java.sql.*;
  */
 public class mainScreen extends javax.swing.JFrame {
 
-    String username;
-    Connection conn = null;
     /** Creates new form mainScreen */
     public mainScreen() {
         initComponents();
-    }
-    
-    public mainScreen(String uname, Connection conn) {
-        initComponents();
-        this.conn = conn;
-        username = uname;
-        jLabel2.setText(username);
+        jLabel2.setText(DBConnector.getInstance().authenticatedUser.getUsername());
         jLabel3.setText("So-and-so");
     }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -198,30 +192,35 @@ public class mainScreen extends javax.swing.JFrame {
 
     @Action
     public void resourceSearch() {
+        SubPages.SearchForResource sForResource = new SubPages.SearchForResource();
+        //sf.setVisible(true);
+        sForResource.setVisible(true);
         
     }
 
     @Action
     public void addIncident() {
-        SubPages.AddEmergencyInciden ai = new SubPages.AddEmergencyInciden(username, conn);
+        SubPages.AddEmergencyInciden ai = new SubPages.AddEmergencyInciden();
         ai.setVisible(true);
         
     }
 
     @Action
     public void addResource() {
-        SubPages.AddResource rs = new SubPages.AddResource(username, conn);
+        SubPages.AddResource rs = new SubPages.AddResource();
         rs.setVisible(true);
     }
 
     @Action
     public void resourceStatus() {
-        SubPages.SearchForResource searchFor = new SubPages.SearchForResource(username, conn);
+        SubPages.ResourceStatus searchFor = new SubPages.ResourceStatus("", null);
         searchFor.setVisible(true);
     }
 
     @Action
     public void resourceReport() {
+        SubPages.ResourceReport resourceReport = new SubPages.ResourceReport("", null);
+        resourceReport.setVisible(true);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -10,6 +10,7 @@
  */
 package SubPages;
 
+import DB.DBConnector;
 import org.jdesktop.application.Action;
 import java.sql.*;
 
@@ -19,22 +20,11 @@ import java.sql.*;
  */
 public class AddEmergencyInciden extends javax.swing.JFrame {
 
-    String username = null;
-    Connection conn = null;
     /** Creates new form AddEmergencyInciden */
     public AddEmergencyInciden() {
         initComponents();
-        
-        
     }
     
-    public AddEmergencyInciden(String username, Connection conn) {
-        initComponents();
-        this.username = username;
-        this.conn = conn;
-        
-    }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is

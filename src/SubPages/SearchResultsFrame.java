@@ -17,6 +17,9 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.sql.*;
+import java.util.ArrayList;
+import DB.*;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -25,8 +28,7 @@ import java.sql.*;
 public class SearchResultsFrame extends javax.swing.JFrame {
     
     ResultSet rs = null;
-    String username = null;
-    Connection conn = null;
+    
    /*public static void main(String [] args){
        SearchResultsFrame frame  = new SearchResultsFrame();
        
@@ -36,9 +38,7 @@ public class SearchResultsFrame extends javax.swing.JFrame {
     
 
     /** Creates new form SearchResultsFrame */
-    public SearchResultsFrame(String username, Connection conn, ResultSet rs) {
-        this.username = username;
-        this.conn = conn;
+    public SearchResultsFrame(Connection conn, ArrayList<Resources> resources) {
         this.rs = rs;
         //create a clickstener to respond to the press of the button inside the table. Then we 
         // can compare the label of the buttom, and from there decide what action, or what
@@ -61,13 +61,36 @@ public class SearchResultsFrame extends javax.swing.JFrame {
         );
         
         initComponents();
-        mytable.getColumn("Action").setCellRenderer(new ButtonRenderer());
+        
+        for(Resources resource : resources)
+        {
+            DefaultTableCellRenderer render = new DefaultTableCellRenderer();
+            render.setText("ID1");
+            
+            mytable.getColumn("ID").setCellRenderer(render);
+            
+            //This may not work because it may change all references to the render object. Try it out!
+            render.setText("Name");
+            mytable.getColumn("Name").setCellRenderer(render);
+            
+            mytable.getColumn("Action").setCellRenderer(new ButtonRenderer(resource));
+        }
+        
     }
     
     class ButtonRenderer extends JButton implements TableCellRenderer {
 
-  public ButtonRenderer() {
+  public ButtonRenderer(Resources resource) {
     setOpaque(true);
+    
+    if(resource.AmIOwner((DBConnector.getInstance().authenticatedUser.getUsername())))
+    {
+        //Add button to delete or edit
+    }
+    else
+    {
+        //Add the button to request
+    }
   }
 
   public Component getTableCellRendererComponent(JTable table, Object value,
