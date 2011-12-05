@@ -141,7 +141,7 @@ public class DBConnector {
         return results;
     }
     
-    public void findResources(String keyWordField, int selectedEsfNum)
+    public ResultSet findResources(String keyWordField, int selectedEsfNum)
     {
         String query = "SELECT res.RESOURCEID FROM ";
         query += "(RESOURCE as res ";
@@ -184,6 +184,9 @@ public class DBConnector {
         }
         catch(SQLException s){
             s.printStackTrace(); // this is lazy. --chris
+        }
+        finally{
+            return rs;
         }
     }
     

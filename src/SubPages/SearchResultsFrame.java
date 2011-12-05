@@ -38,7 +38,7 @@ public class SearchResultsFrame extends javax.swing.JFrame {
     
 
     /** Creates new form SearchResultsFrame */
-    public SearchResultsFrame(Connection conn, ArrayList<Resources> resources) {
+    public SearchResultsFrame(Connection conn, ResultSet rs) {
         this.rs = rs;
         //create a clickstener to respond to the press of the button inside the table. Then we 
         // can compare the label of the buttom, and from there decide what action, or what
@@ -62,6 +62,9 @@ public class SearchResultsFrame extends javax.swing.JFrame {
         
         initComponents();
         
+       //This ain't gonna work
+       // TODO complete this method, possibly rewrite. 
+       /*
         for(Resources resource : resources)
         {
             DefaultTableCellRenderer render = new DefaultTableCellRenderer();
@@ -75,7 +78,7 @@ public class SearchResultsFrame extends javax.swing.JFrame {
             
             mytable.getColumn("Action").setCellRenderer(new ButtonRenderer(resource));
         }
-        
+        */
     }
     
     class ButtonRenderer extends JButton implements TableCellRenderer {
