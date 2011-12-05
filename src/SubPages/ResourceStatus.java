@@ -9,16 +9,43 @@
  * Created on Nov 30, 2011, 7:34:09 PM
  */
 package SubPages;
+import java.sql.*;
+import org.jdesktop.application.Action;
+
 
 /**
  *
  * @author roly_rf
  */
 public class ResourceStatus extends javax.swing.JFrame {
+    String username = null;
+    Connection conn = null;
+    ResultSet rs = null;
+
 
     /** Creates new form ResourceStatus */
-    public ResourceStatus() {
+    public ResourceStatus(String username, Connection conn) {
+        this.username = username;
+        this.conn = conn;
         initComponents();
+        
+        String recievedQuery = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, INC.DECLARED_BY FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = REQ.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE RES.OWNER = "+ username +" AND REQ.STATUS = 'REQUESTED';";
+        String requestedQuery = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, RES.OWNER FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = REQ.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE REQ.STATUS = 'REQUESTED' AND INC.DECLARED_BY = " + username + ";" ;
+        String inuseQuery = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, RES.OWNER FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = RES.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE REQ.STATUS = 'ACTIVE' AND INC.DECLARED_BY = "+ username + ";";
+        try{
+        Statement inuseQ = conn.createStatement();
+        Statement reqQ = conn.createStatement();
+        Statement recQ = conn.createStatement();
+        rs = reqQ.executeQuery(requestedQuery);
+        rs = recQ.executeQuery(recievedQuery);
+        rs = inuseQ.executeQuery(inuseQuery);
+        System.out.println(rs.next());//Dont know how to put data into a table
+    }
+    
+    catch(SQLException s){
+        System.out.println("there are no selections by this user");
+        //s.printStackTrace();
+}
     }
 
     /** This method is called from within the constructor to
@@ -32,6 +59,15 @@ public class ResourceStatus extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("Form"); // NOI18N
@@ -43,29 +79,125 @@ public class ResourceStatus extends javax.swing.JFrame {
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
 
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Resource Name", "Incident", "Owner", "Action"
+            }
+        ));
+        jTable1.setName("jTable1"); // NOI18N
+        jScrollPane1.setViewportView(jTable1);
+
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Resource Name", "Incident", "Action"
+            }
+        ));
+        jTable2.setName("jTable2"); // NOI18N
+        jScrollPane2.setViewportView(jTable2);
+
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID", "Resource Name", "Incident", "Action"
+            }
+        ));
+        jTable3.setName("jTable3"); // NOI18N
+        jScrollPane3.setViewportView(jTable3);
+
+        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setName("jLabel4"); // NOI18N
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(emergencymanagementapp.EmergencyManagementApp.class).getContext().getActionMap(ResourceStatus.class, this);
+        jButton1.setAction(actionMap.get("close")); // NOI18N
+        jButton1.setName("Close"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .add(49, 49, 49)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel2)
-                    .add(jLabel1))
-                .addContainerGap(251, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                        .add(35, 35, 35)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+                            .add(jLabel3)
+                            .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 242, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                        .add(48, 48, 48)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel2)
+                            .add(jLabel1))
+                        .add(476, 476, 476)))
+                .add(43, 43, 43))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(497, Short.MAX_VALUE)
+                .add(jButton1)
+                .add(101, 101, 101))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
+                .add(16, 16, 16)
                 .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(24, 24, 24)
                 .add(jLabel2)
-                .addContainerGap(234, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 103, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 16, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jButton1)
+                .add(17, 17, 17))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+    setVisible(false);
+    // TODO add your handling code here:
+}//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -98,12 +230,25 @@ public class ResourceStatus extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new ResourceStatus().setVisible(true);
+                //new ResourceStatus().setVisible(true);
             }
         });
     }
+
+    @Action
+    public void close() {
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
     // End of variables declaration//GEN-END:variables
 }

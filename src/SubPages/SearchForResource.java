@@ -21,11 +21,12 @@ import java.util.*;
 public class SearchForResource extends javax.swing.JFrame {
     Connection conn = null;
     String username = null;
-    ArrayList MyEsfList = new ArrayList();
-    ArrayList MyIncidentList = new ArrayList();
+//    ArrayList MyEsfList = new ArrayList();
+//    ArrayList MyIncidentList = new ArrayList();
 
     /** Creates new form SearchForResource */
     public SearchForResource(String username, Connection conn) {
+        initComponents();
         this.conn = conn;
         this.username = username;
         
@@ -85,7 +86,6 @@ public class SearchForResource extends javax.swing.JFrame {
         jTextField1.setText(resourceMap.getString("jTextField1.text")); // NOI18N
         jTextField1.setName("jTextField1"); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(emergencymanagementapp.EmergencyManagementApp.class).getContext().getActionMap(SearchForResource.class, this);
         jComboBox1.setAction(actionMap.get("populateComboBox")); // NOI18N
         jComboBox1.setName("jComboBox1"); // NOI18N
@@ -123,10 +123,10 @@ public class SearchForResource extends javax.swing.JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
                         .add(51, 51, 51)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(jComboBox2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(jComboBox1, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(jComboBox2, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(jTextField1)))
                     .add(layout.createSequentialGroup()
                         .add(40, 40, 40)
                         .add(jLabel5)
@@ -220,28 +220,140 @@ public class SearchForResource extends javax.swing.JFrame {
     @Action
     public void searchFor() {
         
+        comboitem selectedEsf = (comboitem)jComboBox1.getSelectedItem();
+        int selectedEsfNum = selectedEsf.getNumber();
+        
+        comboitem selectedInc = (comboitem)jComboBox2.getSelectedItem();
+        int selectedIncNum = selectedInc.getNumber();
+        
+        ArrayList<Integer> resources = new ArrayList();
+
+        
         String keyWordField = jTextField1.getText();
         int distanceVar = Integer.parseInt(jTextField2.getText());
+        
+        
+        String query = "SELECT res.RESOURCEID FROM ";
+        query += "(RESOURCE as res ";
+        query += "JOIN SECONDARY_ESF as esf ON res.RESOURCE_ID = esf.RESOURCE_ID) ";
+        query += "JOIN RESOURCE_CAPABILITIES as cap ON res.RESOURCE_ID = cap.RESOURCE_ID ";
+        query += "WHERE ";
+        
+        
+        //assembling WHERE clause below
+        
+        if (!keyWordField.equals("")){
+            //Add the keyword to the WHERE clause
+            query += "res.NAME LIKE '%" + keyWordField + "%' OR ";
+            query += "res.model LIKE '%" + keyWordField + "%' OR ";
+            query += "cap.CAPABILITY LIKE '%" + keyWordField + "%' AND";
+        }
+        
+        if (selectedEsfNum != 0){
+            query += "res.PRIMARY_ESF = " + selectedEsfNum + " OR ";
+            query += "esf.NUMBER = " + selectedEsfNum + " AND ";
+        }
+        
+        query += "TRUE;";
+        
+        
+    
+        
+        
+        
+        ResultSet rs = null;
+                
+        SearchResultsFrame sf = new SearchResultsFrame(username, conn, rs);
+        sf.setVisible(true);
+
+        
+        try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
+
+            
+            if(true) // IF the distance entered is "", don't do this. Writeme
+            {
+            rs.beforeFirst();
+            while (rs.next()){
+                int thisresourcenumber = rs.getInt(1);
+                
+                String askForResourceLoc = "SELECT LATITUDE, LONGITUDE from RESOURCE where RESOURCE_ID = " + thisresourcenumber;
+                ResultSet distance = st.executeQuery(askForResourceLoc);
+                
+
+            }
+            }
+            
+        }
+        catch(SQLException s){
+            s.printStackTrace(); // this is lazy. --chris
+        }
+        
         
     }
 
     @Action
     public void populateComboBox() {
-        for (int i =0; i< MyEsfList.size(); i++){
-           jComboBox1.addItem(i);// Dont know why doesnt work
+        
+        
+        String query = "SELECT DISTINCT NAME, DESCRIPTION FROM ESF";
+        ResultSet rs = null;
+        
+        jComboBox1.addItem(new comboitem(0,"No selection"));
+        
+        try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                jComboBox1.addItem(new comboitem (rs.getInt(1) , rs.getString(2)));
+            }
+
         }
-        jComboBox1.getSelectedItem();
+        catch(SQLException s){
+            s.printStackTrace(); // this is lazy. --chris
+        }
+        
+
+        
+        //jComboBox1.getSelectedItem();
     }
 
     @Action
     public void populateComboBox2() {
-        for (int i =0; i < MyIncidentList.size(); i++){
-            jComboBox2.addItem(i);
+        
+        
+        String query = "SELECT DISTINCT INCIDENT_ID, DESCRIPTION FROM INCIDENT;";
+        ResultSet rs = null;
+        
+        jComboBox1.addItem(new comboitem(0,"No selection"));
+        
+        try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                jComboBox2.addItem(new comboitem (rs.getInt(1) , rs.getString(2)));
+            }
+
         }
-        jComboBox2.getSelectedItem();
+        catch(SQLException s){
+            s.printStackTrace(); // this is lazy. --chris
+        }
+        
+        
     } 
         
-    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -256,4 +368,27 @@ public class SearchForResource extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+}
+
+
+class comboitem{
+    
+    public int number;
+    public String description;
+    
+    public comboitem (int number, String description){
+            this.number = number;
+            this.description = description;
+            
+        
+    }
+    
+    public String toString(){
+        return ""+ number + " -- " + description;
+    }
+    
+    public int getNumber(){
+        return number;
+    }
+    
 }
