@@ -260,7 +260,7 @@ public class EmergencyManagementView extends FrameView {
         
         String username = DBConnector.getInstance().login(jTextPane1.getText(), jTextPane2.getText());
         
-        if(!username.equals("")){ //if login is valid it should not be empty, go 'head and open up the rest of the thing
+        if(username != null){ //if login is valid it should not be empty, go 'head and open up the rest of the thing
             mainPage.mainScreen ms = new mainPage.mainScreen();
             ms.setVisible(true);
         }

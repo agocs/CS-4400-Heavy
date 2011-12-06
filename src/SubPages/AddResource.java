@@ -13,6 +13,8 @@ package SubPages;
 import DB.DBConnector;
 import org.jdesktop.application.Action;
 import java.sql.*;
+import java.util.*;
+import DB.ESF;
 
 /**
  *
@@ -23,7 +25,19 @@ public class AddResource extends javax.swing.JFrame {
     /** Creates new form AddResource */
     public AddResource() {
         initComponents();
+        
+        jComboBox2.removeAllItems();
+        
+        ArrayList<ESF> esfList = DBConnector.getInstance().getAllESF();
+        
+        for (ESF e:esfList){
+            jComboBox2.addItem(e);
+        }
+        
+        
     }
+    
+    
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -256,6 +270,8 @@ public class AddResource extends javax.swing.JFrame {
 
     @Action
     public void submitNewResource() {
+        String resName= jTextField1.getText();
+        
     }
 
     @Action
@@ -285,4 +301,18 @@ public class AddResource extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
+}
+
+class Component{
+    public int number;
+    public String name;
+    public Component(int number, String name){
+        this.number=number;
+        this.name=name;
+    }
+    
+    @Override 
+    public String toString(){
+        return ""+number+" -- "+name;
+    }
 }

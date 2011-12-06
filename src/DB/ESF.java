@@ -34,4 +34,9 @@ public class ESF {
         this.name = name;
     }
     
+    @Override
+    public String toString(){
+        return ""+name+" -- "+description;
+    }
+    
 }
