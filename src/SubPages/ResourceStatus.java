@@ -18,34 +18,11 @@ import org.jdesktop.application.Action;
  * @author roly_rf
  */
 public class ResourceStatus extends javax.swing.JFrame {
-    String username = null;
-    Connection conn = null;
-    ResultSet rs = null;
-
 
     /** Creates new form ResourceStatus */
-    public ResourceStatus(String username, Connection conn) {
-        this.username = username;
-        this.conn = conn;
+    public ResourceStatus() {
         initComponents();
         
-        String recievedQuery = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, INC.DECLARED_BY FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = REQ.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE RES.OWNER = "+ username +" AND REQ.STATUS = 'REQUESTED';";
-        String requestedQuery = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, RES.OWNER FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = REQ.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE REQ.STATUS = 'REQUESTED' AND INC.DECLARED_BY = " + username + ";" ;
-        String inuseQuery = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, RES.OWNER FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = RES.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE REQ.STATUS = 'ACTIVE' AND INC.DECLARED_BY = "+ username + ";";
-        try{
-        Statement inuseQ = conn.createStatement();
-        Statement reqQ = conn.createStatement();
-        Statement recQ = conn.createStatement();
-        rs = reqQ.executeQuery(requestedQuery);
-        rs = recQ.executeQuery(recievedQuery);
-        rs = inuseQ.executeQuery(inuseQuery);
-        System.out.println(rs.next());//Dont know how to put data into a table
-    }
-    
-    catch(SQLException s){
-        System.out.println("there are no selections by this user");
-        //s.printStackTrace();
-}
     }
 
     /** This method is called from within the constructor to

@@ -5,6 +5,8 @@
 package DB;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.*;
+
 
 /**
  *
@@ -144,8 +146,8 @@ public class DBConnector {
     public ResultSet findResources(String keyWordField, int selectedEsfNum)
     {
         String query = "SELECT res.RESOURCEID FROM ";
-        query += "(RESOURCE as res ";
-        query += "JOIN SECONDARY_ESF as esf ON res.RESOURCE_ID = esf.RESOURCE_ID) ";
+        query += "RESOURCE as res ";
+        query += "JOIN SECONDARY_ESF as esf ON res.RESOURCE_ID = esf.RESOURCE_ID ";
         query += "JOIN RESOURCE_CAPABILITIES as cap ON res.RESOURCE_ID = cap.RESOURCE_ID ";
         query += "WHERE ";
         
@@ -205,4 +207,130 @@ public class DBConnector {
         }
     }
     
+    
+    public ArrayList<Resources> getResourceStatusInuse(String username){
+        String query = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, RES.OWNER FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = RES.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE REQ.STATUS = 'ACTIVE' AND INC.DECLARED_BY = "+ username + ";";
+        ArrayList<Resources> results = new ArrayList<Resources>();
+        ResultSet rs = null;
+        try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); 
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                Resources inc = new Resources();
+                results.add(inc);
+            }
+
+        }
+        catch(SQLException s){
+            s.printStackTrace(); 
+        }
+        return results;
+    }
+    
+        public ArrayList<Resources> getResourceStatusRequested(String username){
+        String query = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, RES.OWNER FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = REQ.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE REQ.STATUS = 'REQUESTED' AND INC.DECLARED_BY = " + username + ";" ;
+        ArrayList<Resources> results = new ArrayList<Resources>();
+        ResultSet rs = null;
+        
+        try{
+            Statement sat = conn.createStatement();
+            rs = sat.executeQuery(query); 
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                Resources inc = new Resources();
+                results.add(inc);
+            }
+
+        }
+        catch(SQLException s){
+            s.printStackTrace(); 
+        }
+        return results;
+    }
+        
+         public ArrayList<Resources> getResourceStatusRecieved(String username){
+             ArrayList<Resources> results = new ArrayList<Resources>();
+             ResultSet rs = null;
+             String query = "SELECT RES.RESOURCE_ID, RES.NAME,  INC.DESCRIPTION, RES.OWNER FROM RESOURCE RES JOIN REQUEST REQ ON RES.RESOURCE_ID = RES.RESOURCE_ID JOIN INCIDENT INC ON REQ.INCIDENT_ID = INC.INCIDENT_ID WHERE REQ.STATUS = 'ACTIVE' AND INC.DECLARED_BY = "+ username + ";";
+        
+        try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); 
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                Resources inc = new Resources();
+                results.add(inc);
+            }
+
+        }
+        catch(SQLException s){
+            s.printStackTrace(); 
+        }
+        return results;
+    }
+         
+    public ArrayList<Resources> getTotalResources(String username){
+        ArrayList<Resources> results = new ArrayList<Resources>();
+        ResultSet rs = null;
+        String query = "CREATE VIEW V1 AS SELECT RES.PRIMARY_ESF, F.DESCRIPTION COUNT (*) AS TOTALRES FROM ESF F LEFT OUTER JOIN RESOURCE AS RES WHERE RES.OWNER =" + username + " GROUP BY PRIMARY_ESF, DESCRIPTION;" ;
+        
+        try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); 
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                Resources inc = new Resources();
+                results.add(inc);
+            }
+
+        }
+        catch(SQLException s){
+            s.printStackTrace(); 
+        }
+        return results;
+    }     
+    
+    public ArrayList<Resources> getResourcesInUse(String username){
+        ArrayList<Resources> results = new ArrayList<Resources>();
+        ResultSet rs = null; 
+        String query = "CREATE VIEW V2 AS SELECT RES.PRIMARY_ESF, F.DESCRIPTION , COUNT (*) AS INUSETOT FROM ((ESF F LEFT OUTER JOIN RESOURCE RES) NATURAL JOIN REQUEST REQ) WHERE RES.OWNER = " + username + " AND REQ.STATUS = 'ACTIVE' GROUP BY PRIMARY_ESF, DESCRIPTION;";
+        
+             try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); 
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                Resources inc = new Resources();
+                results.add(inc);
+            }
+
+        }
+        catch(SQLException s){
+            s.printStackTrace(); 
+        }
+        return results;
+    }
+    
 }
+

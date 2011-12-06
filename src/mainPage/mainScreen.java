@@ -213,13 +213,13 @@ public class mainScreen extends javax.swing.JFrame {
 
     @Action
     public void resourceStatus() {
-        SubPages.ResourceStatus searchFor = new SubPages.ResourceStatus("", null);
+        SubPages.ResourceStatus searchFor = new SubPages.ResourceStatus();
         searchFor.setVisible(true);
     }
 
     @Action
     public void resourceReport() {
-        SubPages.ResourceReport resourceReport = new SubPages.ResourceReport("", null);
+        SubPages.ResourceReport resourceReport = new SubPages.ResourceReport();
         resourceReport.setVisible(true);
     }
     

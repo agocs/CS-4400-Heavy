@@ -11,6 +11,8 @@
 package SubPages;
 
 import java.awt.Component;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -19,6 +21,7 @@ import javax.swing.table.TableCellRenderer;
 import java.sql.*;
 import java.util.ArrayList;
 import DB.*;
+import java.util.List;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -36,6 +39,41 @@ public class SearchResultsFrame extends javax.swing.JFrame {
        frame.setVisible(true);
    }*/
     
+    
+    public static String [][] getData(ResultSet rs) throws SQLException{
+     
+        ArrayList<String[]> results = new ArrayList<String[]>();
+        
+      
+        while(rs.next()){
+            String [] row = new String[7];
+            
+            for(int i=1;i<=7;i++)
+                row[i-1] = rs.getString(i);
+            
+            results.add(row);
+        }
+        
+        return listToArray(results);
+    } 
+    
+    /**
+     * convert a list of String[] to array
+     * @param list
+     * @return 
+     */
+    private static String[][] listToArray(List<String[]> list){
+        String[][] ret = new String[list.size()][list.get(0).length];
+        
+        int i = 0;
+        for(String[] row : list){
+            ret[i] = row;
+            i++;
+        }
+        
+        return ret;
+    }
+    
 
     /** Creates new form SearchResultsFrame */
     public SearchResultsFrame(Connection conn, ResultSet rs) {
@@ -51,7 +89,13 @@ public class SearchResultsFrame extends javax.swing.JFrame {
         JButton btn = new JButton();
         btn.setText("test");
         
-        //sampleData = new Object[][]{{"abc", "bcd", "casda", "Add action"}, {"abc", "bcd", "casda", "Delete action"}};
+        System.out.println(rs);
+        try {
+            sampleData = getData(rs);
+        } catch (SQLException ex) {
+            sampleData = new Object[0][0];
+            Logger.getLogger(SearchResultsFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         datamodel = new javax.swing.table.DefaultTableModel(
             sampleData,
@@ -109,6 +153,14 @@ public class SearchResultsFrame extends javax.swing.JFrame {
     return this;
   }
 }
+    
+    public void requestResource(){
+        String myIncidentId = null; 
+        String myESF = null;
+        String myResource_ID = null;
+        
+        //String query = "IF NOT ISNULL($MyIncidentId) BEGIN INSERT INTO REQUEST VALUES(" + myIncidentId + "," + myResource_ID +","+ "'REQUESTED'" + ","+GETDATE()+")" ;      
+    }
 
 
     /** This method is called from within the constructor to

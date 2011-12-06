@@ -219,12 +219,16 @@ public class SearchForResource extends javax.swing.JFrame {
 
         
         String keyWordField = jTextField1.getText();
-        int distanceVar = Integer.parseInt(jTextField2.getText());
+        
+        String distanceStr = jTextField2.getText();
+        int distanceVar = 0;
+        if(distanceStr != null && !distanceStr.isEmpty())
+            distanceVar = Integer.parseInt(distanceStr);
         
         ResultSet results = DBConnector.getInstance().findResources(keyWordField, selectedEsfNum);
         
         
-        //TOD: Fix this
+        //FIXME TOD: Fix this
         SearchResultsFrame sf = new SearchResultsFrame(null, results);
         sf.setVisible(true);
         

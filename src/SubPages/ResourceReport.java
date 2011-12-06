@@ -9,6 +9,7 @@
  * Created on Dec 4, 2011, 2:31:44 PM
  */
 package SubPages;
+import DB.*;
 import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -16,6 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.sql.*;
+import java.util.ArrayList;
 
 
 
@@ -29,10 +31,12 @@ public class ResourceReport extends javax.swing.JFrame {
     String username = null;
 
     /** Creates new form ResourceReport */
-    public ResourceReport(String username , Connection conn) {
+    public ResourceReport() {
         
         //sampleData = new Object[][]{{"abc", "bcd", "casda", "Add action"}, {"abc", "bcd", "casda", "Delete action"}};
         
+        ArrayList<Resources> resourceArrayList = new ArrayList<Resources>();
+        //resourceArrayList.add(DBConnector.getInstance().getAllESF());
        pack();
        setVisible(true);
         datamodel2 = new javax.swing.table.DefaultTableModel(sampleData ,
