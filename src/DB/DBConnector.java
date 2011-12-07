@@ -187,38 +187,39 @@ public class DBConnector {
          * 
          */
         
-        String query = "INSERT INTO RESOURCES ";
+        String query = "INSERT INTO RESOURCE ";
         query += "(NAME, MODEL, COST, LATITUDE, LONGITUDE, PRIMARY_ESF, OWNER, COST_PER) ";
         query += "VALUES( ";
-        query += name + ", ";
-        query += model + ", ";
+        query += "'" + name + "', ";
+        query += "'" + model + "', ";
         query += cost + ", ";
         query += lat + ", ";
         query += lon + ", ";
         query += esf + ", ";
-        query += getUsername() + ", ";
+        query += "'"+username + "', ";
+        query += "'"+cost_per + "');";
+        
+        StringTokenizer tok = new StringTokenizer(secondaryESFs);
         
         
-        
-        
-        
-
-        ResultSet rs = null;
-        ArrayList<Incident> results = new ArrayList<Incident>();
         
         try{
             Statement st = conn.createStatement();
-            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
+            st.executeUpdate(query); //resultset rs will contain 1 if the username+pass is valid
             
+            ResultSet rs = st.executeQuery("SELECT RESOURCE_ID FROM RESOURCE ORDER BY RESOURCE_ID DESC;");
+            rs.first();
+            int resource_id = rs.getInt(1);
             
-            rs.beforeFirst();
+            //add secondary esf
             
-            while(rs.next()){
-             
-                Incident inc = new Incident(rs.getInt(1) , rs.getString(2));
-                results.add(inc);
+            while(tok.hasMoreTokens()){
+                String newEsf = "INSERT INTO SECONDARY_ESF (RESOURCE_ID, ESF_NAME) ";
+                newEsf += "VALUES(";
+                newEsf += resource_id+", '"+tok.nextToken()+"');";
+                st.executeUpdate(newEsf);
             }
-
+           
         }
         catch(SQLException s){
             s.printStackTrace(); // this is lazy. --chris

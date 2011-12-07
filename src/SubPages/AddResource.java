@@ -292,7 +292,7 @@ public class AddResource extends javax.swing.JFrame {
     @Action
     public void submitNewResource() {
         String resName= jTextField1.getText();
-        ESF selectedEsf = (ESF)jComboBox1.getSelectedItem();
+        ESF selectedEsf = (ESF)jComboBox2.getSelectedItem();
         int selectedEsfNum = selectedEsf.getName();
         
         String addlEsfs = jTextField2.getText();
@@ -303,7 +303,9 @@ public class AddResource extends javax.swing.JFrame {
         int cost = Integer.parseInt(jTextField6.getText());
         String cost_per = (String)jComboBox1.getSelectedItem();
         
+        DBConnector.getInstance().insertResource(resName, selectedEsfNum, addlEsfs, model, capabilities, lat, lon, cost, cost_per);
         
+        setVisible(false);
         
     }
 
