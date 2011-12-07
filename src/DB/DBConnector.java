@@ -4,7 +4,6 @@
  */
 package DB;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.*;
 
 
@@ -13,6 +12,8 @@ import java.util.*;
  * @author roly_rf
  */
 public class DBConnector {
+    
+    private String username;
     
     private static DBConnector instance = null;
     private Connection conn;
@@ -53,6 +54,7 @@ public class DBConnector {
     
     public String login(String username, String password)
     {
+        this.username = username;
         int count = 0;
         ResultSet rs = null;
         
@@ -307,7 +309,8 @@ public class DBConnector {
         return results;
     }     
     
-    public ArrayList<Resources> getResourcesInUse(String username){
+    public ArrayList<Resources> getResourcesInUse(String username)
+    {
         ArrayList<Resources> results = new ArrayList<Resources>();
         ResultSet rs = null; 
         String query = "CREATE VIEW V2 AS SELECT RES.PRIMARY_ESF, F.DESCRIPTION , COUNT (*) AS INUSETOT FROM ((ESF F LEFT OUTER JOIN RESOURCE RES) NATURAL JOIN REQUEST REQ) WHERE RES.OWNER = " + username + " AND REQ.STATUS = 'ACTIVE' GROUP BY PRIMARY_ESF, DESCRIPTION;";
@@ -331,6 +334,28 @@ public class DBConnector {
         }
         return results;
     }
+
+    public void insertIncident(String myDate, String description, float lat, float longitude)
+    {
+        
+        try
+        {           
+            Statement st = conn.createStatement();
+            String insertMyIncid = "INSERT INTO INCIDENT (IncidentDT, DESCRIPTION, + LATITUDE, LONGITUDE, DECLARED_BY) VALUES( " + myDate + ", "+ description +" , " + lat +" , " + longitude + " , " + username + " );";
+            
+            
+            st.executeUpdate(insertMyIncid);
+        }
+        
+        catch(SQLException s){
+            s.printStackTrace(); // this is lazy. --chris
+        }
+    }
     
+    public String getUserName(){
+        return username;
+    }
+    
+ 
 }
 

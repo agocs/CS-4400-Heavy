@@ -214,6 +214,15 @@ private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         String desc = jTextArea1.getText();
         float lat = Float.parseFloat(jTextField2.getText());
         float lon = Float.parseFloat(jTextField3.getText());
+     
+       // input fields validation
+        if (date.isEmpty()||desc.isEmpty()||lat==0||lon==0)
+        {
+            System.out.println("You cannot leave any field empty!");
+            setVisible(false);
+        }
+        else 
+        DBConnector.getInstance().insertIncident(date, desc, lat, lon);
         
         
     }
