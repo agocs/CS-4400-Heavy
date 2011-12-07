@@ -371,7 +371,7 @@ public class DBConnector {
     public ArrayList<Resources> getTotalResources(String username){
         ArrayList<Resources> results = new ArrayList<Resources>();
         ResultSet rs = null;
-        String query = "CREATE VIEW V1 AS SELECT RES.PRIMARY_ESF, F.DESCRIPTION COUNT (*) AS TOTALRES FROM ESF F LEFT OUTER JOIN RESOURCE AS RES WHERE RES.OWNER =" + username + " GROUP BY PRIMARY_ESF, DESCRIPTION;" ;
+        String query = "CREATE VIEW V1 AS SELECT RES.PRIMARY_ESF, F.DESCRIPTION, COUNT(*) TOTALRES FROM ESF F LEFT OUTER JOIN RESOURCE AS RES ON RES.PRIMARY_ESF=F.NAME WHERE RES.OWNER ='" + username + "' GROUP BY RES.PRIMARY_ESF, F.DESCRIPTION;" ;
         
         try{
             Statement st = conn.createStatement();
@@ -393,11 +393,11 @@ public class DBConnector {
         return results;
     }     
     
-    public ArrayList<Resources> getResourcesInUse(String username)
+    public ResultSet getResourcesInUse()
     {
         ArrayList<Resources> results = new ArrayList<Resources>();
         ResultSet rs = null; 
-        String query = "CREATE VIEW V2 AS SELECT RES.PRIMARY_ESF, F.DESCRIPTION , COUNT (*) AS INUSETOT FROM ((ESF F LEFT OUTER JOIN RESOURCE RES) NATURAL JOIN REQUEST REQ) WHERE RES.OWNER = " + username + " AND REQ.STATUS = 'ACTIVE' GROUP BY PRIMARY_ESF, DESCRIPTION;";
+        String query = "CREATE VIEW V2 AS SELECT RES.PRIMARY_ESF, F.DESCRIPTION , COUNT(*) INUSETOT FROM ((ESF F LEFT OUTER JOIN RESOURCE RES ON RES.PRIMARY_ESF=F.NAME) NATURAL JOIN REQUEST REQ) WHERE RES.OWNER = '" + username + "' AND REQ.STATUS = 'ACTIVE' GROUP BY RES.PRIMARY_ESF, F.DESCRIPTION;";
         
              try{
             Statement st = conn.createStatement();
@@ -416,7 +416,7 @@ public class DBConnector {
         catch(SQLException s){
             s.printStackTrace(); 
         }
-        return results;
+        return rs;
     }
 
     public void insertIncident(String myDate, String description, float lat, float longitude)
