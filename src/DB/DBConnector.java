@@ -115,6 +115,33 @@ public class DBConnector {
         return results;
     }
     
+        public ArrayList<String> getAllCostPer()
+    {
+        ArrayList<String> results = new ArrayList<String>();
+        String query = "SELECT DISTINCT COST_PER from RESOURCE";
+        ResultSet rs = null;
+ 
+        try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                String cost = rs.getString(1);
+                results.add(cost);
+                
+            }
+
+        }
+        catch(SQLException s){
+            s.printStackTrace(); // this is lazy. --chris
+        }
+        return results;
+    }
+    
     
     public ArrayList<Incident> incidentsDescAndId()
     {
@@ -141,6 +168,62 @@ public class DBConnector {
         }
         
         return results;
+    }
+    
+        public boolean insertResource(String name, int esf, String secondaryESFs, String model, String capabilities, Float lat, Float lon, int cost, String cost_per)
+    {
+        
+        
+        /*String name, 
+         * int esf, 
+         * String secondaryESFs, 
+         * String model, 
+         * String capabilities, 
+         * Float lat, 
+         * Float lon, 
+         * String cost_per
+         * 
+         */
+        
+        String query = "INSERT INTO RESOURCES ";
+        query += "(NAME, MODEL, COST, LATITUDE, LONGITUDE, PRIMARY_ESF, OWNER, COST_PER) ";
+        query += "VALUES( ";
+        query += name + ", ";
+        query += model + ", ";
+        query += cost + ", ";
+        query += lat + ", ";
+        query += lon + ", ";
+        query += esf + ", ";
+        query += getUsername() + ", ";
+        
+        
+        
+        
+        
+
+        ResultSet rs = null;
+        ArrayList<Incident> results = new ArrayList<Incident>();
+        
+        try{
+            Statement st = conn.createStatement();
+            rs = st.executeQuery(query); //resultset rs will contain 1 if the username+pass is valid
+            
+            
+            rs.beforeFirst();
+            
+            while(rs.next()){
+             
+                Incident inc = new Incident(rs.getInt(1) , rs.getString(2));
+                results.add(inc);
+            }
+
+        }
+        catch(SQLException s){
+            s.printStackTrace(); // this is lazy. --chris
+            return false;
+        }
+        
+        return true;
     }
     
     public ResultSet findResources(String keyWordField, int selectedEsfNum)

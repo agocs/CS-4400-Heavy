@@ -14,10 +14,10 @@ package SubPages;
  *
  * @author stephengadd
  */
-public class NewResourceFom extends javax.swing.JFrame {
+public class NewResourceFom_deleteme extends javax.swing.JFrame {
 
     /** Creates new form newResourceFom */
-    public NewResourceFom() {
+    public NewResourceFom_deleteme() {
         initComponents();
     }
 
@@ -215,7 +215,7 @@ public class NewResourceFom extends javax.swing.JFrame {
                                 .add(jLabel11)
                                 .add(jTextField2)
                                 .add(jLabel12)))))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(275, Short.MAX_VALUE)
                 .add(jButton2)
@@ -323,13 +323,13 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewResourceFom.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewResourceFom_deleteme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewResourceFom.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewResourceFom_deleteme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewResourceFom.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewResourceFom_deleteme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewResourceFom.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewResourceFom_deleteme.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -337,7 +337,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new NewResourceFom().setVisible(true);
+                new NewResourceFom_deleteme().setVisible(true);
             }
         });
     }

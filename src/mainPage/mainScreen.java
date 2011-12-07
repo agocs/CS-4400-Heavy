@@ -200,7 +200,7 @@ public class mainScreen extends javax.swing.JFrame {
 
     @Action
     public void addIncident() {
-        SubPages.AddEmergencyInciden ai = new SubPages.AddEmergencyInciden();
+        SubPages.NewIncidentInfo ai = new SubPages.NewIncidentInfo();
         ai.setVisible(true);
         
     }
