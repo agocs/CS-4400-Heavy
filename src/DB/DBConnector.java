@@ -196,7 +196,7 @@ public class DBConnector {
         query += lat + ", ";
         query += lon + ", ";
         query += esf + ", ";
-        query += getUsername() + ", ";
+        query += username + ", ";
         
         
         
@@ -424,9 +424,9 @@ public class DBConnector {
         try
         {           
             Statement st = conn.createStatement();
-            String insertMyIncid = "INSERT INTO INCIDENT (IncidentDT, DESCRIPTION, + LATITUDE, LONGITUDE, DECLARED_BY) VALUES( " + myDate + ", "+ description +" , " + lat +" , " + longitude + " , " + username + " );";
+            String insertMyIncid = "INSERT INTO INCIDENT (IncidentDT, DESCRIPTION, LATITUDE, LONGITUDE, DECLARED_BY) VALUES( '" + myDate + "', '"+ description +"' , " + lat +" , " + longitude + " , '" + username + "' );";
             
-            
+            System.out.print(insertMyIncid);
             st.executeUpdate(insertMyIncid);
         }
         

@@ -10,6 +10,9 @@
  */
 package SubPages;
 
+import DB.DBConnector;
+import org.jdesktop.application.Action;
+
 /**
  *
  * @author stephengadd
@@ -18,6 +21,7 @@ public class NewIncidentInfo extends javax.swing.JFrame {
 
     /** Creates new form NewIncidentInfo */
     public NewIncidentInfo() {
+        //DBConnector dBConnector = new DBConnector();
         initComponents();
     }
 
@@ -49,7 +53,7 @@ public class NewIncidentInfo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 24));
         jLabel1.setText("New Incident Info");
 
         jLabel2.setText("IncidentID");
@@ -57,8 +61,6 @@ public class NewIncidentInfo extends javax.swing.JFrame {
         jLabel4.setText("(assign automatically)");
 
         jLabel5.setText("Date");
-
-        jTextField1.setText("jTextField1");
 
         jLabel6.setText("Description");
 
@@ -68,10 +70,6 @@ public class NewIncidentInfo extends javax.swing.JFrame {
 
         jLabel9.setText("Longitude");
 
-        jTextField3.setText("jTextField3");
-
-        jTextField4.setText("jTextField4");
-
         jButton1.setLabel("Cancel");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -79,7 +77,9 @@ public class NewIncidentInfo extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setLabel("Save");
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(emergencymanagementapp.EmergencyManagementApp.class).getContext().getActionMap(NewIncidentInfo.class, this);
+        jButton2.setAction(actionMap.get("submit")); // NOI18N
+        jButton2.setLabel("Submit");
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -117,14 +117,13 @@ public class NewIncidentInfo extends javax.swing.JFrame {
                                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                             .add(jLabel4)
                                             .add(layout.createSequentialGroup()
-                                                .add(jTextField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                                .add(92, 92, 92)
+                                                .add(jTextField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 92, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                                                 .add(jLabel8)
                                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                                .add(jTextField3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                                .add(jTextField3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                                             .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 121, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 334, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 334, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))))))
                 .addContainerGap(60, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -203,6 +202,32 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 new NewIncidentInfo().setVisible(true);
             }
         });
+    }
+
+    @Action
+    public void submit() {
+        String date = jTextField1.getText();
+        String desc = jTextArea1.getText();
+        float lat = Float.parseFloat(jTextField4.getText());
+        float lon = Float.parseFloat(jTextField3.getText());
+        
+                if (date.isEmpty()||desc.isEmpty()||lat==0||lon==0)
+        {
+            System.out.println("You cannot leave any field empty!");
+            setVisible(false);
+        }
+        else {
+        DBConnector.getInstance().insertIncident(date, desc, lat, lon);
+                }
+    
+    
+        
+        
+    
+        
+    
+        
+        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
